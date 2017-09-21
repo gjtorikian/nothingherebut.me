@@ -1,0 +1,30 @@
+html
+  head
+    title No one here but me
+    link(rel="stylesheet" href="/assets/css/app.css")
+    script(src="/assets/javascripts/scripts.js")
+  body
+    main.wrapper
+      section.container
+        h1 No one here but me
+
+        p
+          | This site is an experiment in interactive fiction. It draws on inspiration from novelists&nbsp;
+          a(href='https://en.wikipedia.org/wiki/Augusto_Monterroso') Augusto Monterroso
+          | 's "The Dinosaur"
+          | and&nbsp;
+          a(href='https://en.wikipedia.org/wiki/Julio_Cort%C3%A1zar') Julio Cortázar
+          | 's "Hopscotch", as well as artist&nbsp;
+          a(href="https://en.wikipedia.org/wiki/Robert_Irwin_(artist)") Robert Irwin
+          | . The text below changes throughout the course of the day. It tells a story, with each piece
+          | able to stand on its own in 140 characters. Depending on where in the world you view
+          | this site, the fragment you receive every hour is different.
+
+        img(id="canvas" src = canvas)
+
+        section.container
+          section.row
+            section.column
+              p#this= thisTime
+            section.column
+              p#next= nextTime
