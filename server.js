@@ -35,7 +35,7 @@ app.get('/', function(req, res) {
   res.render('index', {
     canvas: canvas.toDataURL(),
     thisTime: time.minutesForThisStory + ":" + time.secondsForThisStory,
-    nextTime: time.minutesUntilStory + ":" + time.secondsUntilNextStory,
+    nextTime: time.minutesUntilNextStory + ":" + time.secondsUntilNextStory,
   });
 });
 
@@ -44,7 +44,6 @@ app.get('/data', function(req, res) {
   var ip_info = get_ip(req);
 
   var geo = geoip.lookup(ip_info.clientIp);
-  console.log(geo);
 
   var data = {
     times: calculateTimes(),
