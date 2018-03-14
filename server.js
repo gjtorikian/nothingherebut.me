@@ -1,29 +1,20 @@
+/*jshint esversion: 6 */
+
 var express = require('express'),
     http = require('http'),
     app = express(),
     compileSass = require('express-compile-sass'),
     get_ip = require('ipware')().get_ip,
-    geoip = require('geoip-lite');
+    geoip = require('geoip-lite'),
+    yaml = require('js-yaml'),
+    fs   = require('fs');
 
 const { createCanvas, registerFont } = require('canvas');
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 8888;
 
 registerFont('public/assets/fonts/Lusitana-Bold.ttf', { family: 'Lusitana Bold', weight: 'Bold' });
 
-TEXTS = {
-  "north-east": {
-
-  },
-  "north-west": {
-
-  },
-  "south-west": {
-
-  },
-  "south-east": {
-
-  }
-};
+TEXTS = yaml.safeLoad(require('fs').readFileSync('text.yml', 'utf8'));
 
 app.use(express.static('./public'));
 app.set('view engine', 'pug')
