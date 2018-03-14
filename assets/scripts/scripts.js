@@ -3,16 +3,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   // compatible with IE7+, Firefox, Chrome, Opera, Safari
   var xmlhttp = new XMLHttpRequest();
-  xmlhttp.onreadystatechange = function(){
+  xmlhttp.onreadystatechange = function() {
       if (xmlhttp.readyState == 4 && xmlhttp.status == 200){
-          response = JSON.parse(xmlhttp.responseText);
-          timeUntilNext = response.times.minutesUntilNextStory + ":" + response.times.secondsUntilNextStory;
-          document.getElementById("next").innerHTML = timeUntilNext;
-          timeForThis = response.times.minutesForThisStory + ":" + response.times.secondsForThisStory;
-          document.getElementById("this").innerHTML = timeForThis;
-          document.getElementById("canvas").setAttribute("src", response.canvas);
+        response = JSON.parse(xmlhttp.responseText);
+        timeUntilNext = response.times.minutesUntilNextStory + ":" + response.times.secondsUntilNextStory;
+        document.getElementById("nextTime").innerHTML = timeUntilNext;
+        timeForThis = response.times.minutesForThisStory + ":" + response.times.secondsForThisStory;
+        document.getElementById("thisTime").innerHTML = timeForThis;
+        document.getElementById("canvas").setAttribute("src", response.canvas);
       }
-  }
+  };
   function fetch_and_replace_data() {
     xmlhttp.open("GET", "/data", true);
     xmlhttp.send();

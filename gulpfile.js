@@ -34,6 +34,7 @@ gulp.task('watch', function() {
   livereload.listen();
   gulp.watch('assets/styles/*', ['styles']);
   gulp.watch('assets/scripts/*.js', ['scripts']);
+  gulp.watch('text.yml', ['server']);
   gulp.watch('views/*.pug', ['pug']);
 });
 

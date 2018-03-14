@@ -1,30 +1,37 @@
 html
   head
-    title No one here but me
+    title Nothing Here (but me)
     link(rel="stylesheet" href="/assets/css/app.css")
     script(src="/assets/javascripts/scripts.js")
   body
     main.wrapper
       section.container
-        h1 No one here but me
+        h1 Nothing Here (but me)
 
         p
-          | This site is an experiment in interactive fiction. It draws on inspiration from novelists&nbsp;
+          | This site is an experiment in interactive fiction. It draws on inspiration from
+          br
           a(href='https://en.wikipedia.org/wiki/Augusto_Monterroso') Augusto Monterroso
           | 's "The Dinosaur"
           | and&nbsp;
           a(href='https://en.wikipedia.org/wiki/Julio_Cort%C3%A1zar') Julio Cortázar
-          | 's "Hopscotch", as well as artist&nbsp;
+          | 's "Hopscotch", as well as&nbsp;
           a(href="https://en.wikipedia.org/wiki/Robert_Irwin_(artist)") Robert Irwin
-          | . The text below changes throughout the course of the day. It tells a story, with each piece
-          | able to stand on its own in 140 characters. Depending on where in the world you view
-          | this site, the fragment you receive every hour is different.
+          | .
+          br
+          | The text below changes once per hour over the course of a day. It tells a story, with each piece
+          | able to stand on its own.
+          br
+          | But depending on where in the world you view
+          | this site, the story you receive every hour is different.&nbsp;
+          br
+          a(href='https://github.com/gjtorikian/nothingherebut.me') Learn more about how it works.
 
         img(id="canvas" src = canvas)
 
         section.container
           section.row
             section.column
-              p#this= thisTime
+              p#thisTime= thisTime
             section.column
-              p#next= nextTime
+              p#nextTime= nextTime
