@@ -135,7 +135,10 @@ function paddedTime(time) {
 }
 
 // some range between 0 and 3600 representing the 0 to 1.0 alpha range
-function calculateAlpha(minutes, seconds) {
+function calculateAlpha(m, s) {
+  // we may have padded this into a string via `paddedTime` :(
+  var minutes = Number(m),
+      seconds = Number(s);
   return Number( ( (minutes * 60) + seconds) / 3600).toFixed(2);
 }
 
