@@ -8,6 +8,7 @@
   "homepage": "",
   "repository": "",
   "scripts": {
+    "compile": "gulp compile",
     "dev-server": "gulp serve",
     "server": "node server.js",
     "validate": "node validate.js"

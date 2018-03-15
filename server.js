@@ -52,7 +52,9 @@ app.post('/data', function(req, res) {
   // "8 or 9" is the index in the nested array
   second_index = app.locals.longitude >= 0 ? 9 : 8;
 
-  var clientDate = new Date(req.body.date);
+  // adjust to user's local timezone
+  var clientDate = new Date();
+  clientDate = new Date(clientDate.setHours(clientDate.getHours() + req.body.offset));
 
   var curr_hour = clientDate.getHours();
   var next_hour = curr_hour + 1;
