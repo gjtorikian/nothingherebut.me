@@ -22,7 +22,7 @@ function hourToIndex(hour) {
 
 app.use(bodyParser.json());
 app.use(express.static('./public'));
-app.set('view engine', 'pug')
+app.use('/', express.static('views'));
 
 app.get('/', function(req, res) {
   // on load, calculate the lat and long of the vistor

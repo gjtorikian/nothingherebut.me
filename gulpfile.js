@@ -25,17 +25,12 @@ gulp.task('scripts', function() {
     .pipe(livereload());
 });
 
-gulp.task('pug',function(){
-  return gulp.src('views/*.pug')
-  .pipe(livereload());
-});
-
 gulp.task('watch', function() {
   livereload.listen();
   gulp.watch('assets/styles/*', ['styles']);
   gulp.watch('assets/scripts/*.js', ['scripts']);
   gulp.watch('text.yml', ['server']);
-  gulp.watch('views/*.pug', ['pug']);
+  gulp.watch('views/*.html', ['server']);
 });
 
 gulp.task('server',function(){
