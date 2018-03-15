@@ -42,4 +42,5 @@ gulp.task('server',function(){
   nodemon();
 });
 
-gulp.task('serve', ['styles', 'scripts', 'server', 'watch']);
+gulp.task('compile', ['styles', 'scripts']);
+gulp.task('serve', ['compile', 'server', 'watch']);
