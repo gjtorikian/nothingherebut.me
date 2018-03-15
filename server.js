@@ -2,6 +2,7 @@
 
 var express = require('express'),
     app = express(),
+    bodyParser = require('body-parser'),
     get_ip = require('ipware')().get_ip,
     geoip = require('geoip-lite'),
     yaml = require('js-yaml'),
@@ -19,13 +20,11 @@ function hourToIndex(hour) {
   return hour % 8;
 }
 
+app.use(bodyParser.json());
 app.use(express.static('./public'));
 app.set('view engine', 'pug')
 
 app.get('/', function(req, res) {
-  var canvas = calculateTexts();
-  var time = calculateTimes();
-
   // on load, calculate the lat and long of the vistor
   var ip_info = get_ip(req);
   var client_ip = ip_info.clientIp;
@@ -36,14 +35,10 @@ app.get('/', function(req, res) {
   app.locals.latitude = geo.ll[0];
   app.locals.longitude = geo.ll[1];
 
-  res.render('index', {
-    canvas: canvas.toDataURL(),
-    thisTime: time.minutesForThisStory + ":" + time.secondsForThisStory,
-    nextTime: time.minutesUntilNextStory + ":" + time.secondsUntilNextStory,
-  });
+  res.render('index', {});
 });
 
-app.get('/data', function(req, res) {
+app.post('/data', function(req, res) {
   res.setHeader('Content-Type', 'application/json');
 
   var first_index = 0, second_index = 0;
@@ -57,7 +52,9 @@ app.get('/data', function(req, res) {
   // "8 or 9" is the index in the nested array
   second_index = app.locals.longitude >= 0 ? 9 : 8;
 
-  var curr_hour = new Date().getHours();
+  var clientDate = new Date(req.body.date);
+
+  var curr_hour = clientDate.getHours();
   var next_hour = curr_hour + 1;
   var phrase_one = "", phrase_two = "";
 
@@ -82,7 +79,7 @@ app.get('/data', function(req, res) {
     phrase_two = TEXTS[first_index][second_index][hourToIndex(next_hour)];
   }
 
-  var times = calculateTimes();
+  var times = calculateTimes(clientDate);
   var first_alpha = calculateAlpha(times.minutesUntilNextStory, times.secondsUntilNextStory);
   var second_alpha = calculateAlpha(times.minutesForThisStory, times.secondsForThisStory);
   var canvas = calculateTexts(phrase_one, first_alpha, phrase_two, second_alpha);
@@ -94,15 +91,15 @@ app.get('/data', function(req, res) {
   res.json(data);
 });
 
-function calculateTimes() {
+function calculateTimes(clientDate) {
   var time = {};
 
-  var minutesUntilNextStory = 60 - new Date().getMinutes();
-  var secondsUntilNextStory = 60 - new Date().getSeconds();
+  var minutesUntilNextStory = 60 - clientDate.getMinutes();
+  var secondsUntilNextStory = 60 - clientDate.getSeconds();
   time.minutesUntilNextStory = paddedTime(minutesUntilNextStory);
   time.secondsUntilNextStory = paddedTime(secondsUntilNextStory);
-  var minutesForThisStory = new Date().getMinutes();
-  var secondsForThisStory = new Date().getSeconds();
+  var minutesForThisStory = clientDate.getMinutes();
+  var secondsForThisStory = clientDate.getSeconds();
   time.minutesForThisStory = paddedTime(minutesForThisStory);
   time.secondsForThisStory = paddedTime(secondsForThisStory);
 

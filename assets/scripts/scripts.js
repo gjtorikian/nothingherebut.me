@@ -14,8 +14,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
       }
   };
   function fetch_and_replace_data() {
-    xmlhttp.open("GET", "/data", true);
-    xmlhttp.send();
+    data = { date: new Date() };
+    xmlhttp.open("POST", "/data", true);
+    xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xmlhttp.send(JSON.stringify(data));
   }
 
   function repeatEvery(func, interval) {
