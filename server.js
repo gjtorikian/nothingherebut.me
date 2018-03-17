@@ -15,7 +15,7 @@ registerFont('public/assets/fonts/Lusitana-Bold.ttf', { family: 'Lusitana Bold',
 
 TEXTS = yaml.safeLoad(require('fs').readFileSync('text.yml', 'utf8'));
 
-// returns the index in the story array
+// returns the index in the stored array
 function hourToIndex(hour) {
   return hour % 8;
 }
@@ -30,7 +30,7 @@ app.get('/', function(req, res) {
   var client_ip = ip_info.clientIp;
   var geo = geoip.lookup(client_ip);
   if (geo === null) {
-    geo = geoip.lookup("52.173.133.217"); // somewhere in Des Moines.
+    geo = geoip.lookup("52.173.133.217"); // no IP? give 'em somewhere in Des Moines.
   }
   app.locals.latitude = geo.ll[0];
   app.locals.longitude = geo.ll[1];
@@ -45,11 +45,11 @@ app.post('/data', function(req, res) {
 
   // southern hemisphere is [-90, 0)
   // northern hemisphere is [0, 90]
-  // "8 or 9" is the index in the nested array
+  // "8 or 9" is the index in the first north/south nested array
   first_index = app.locals.latitude >= 0 ? 9 : 8;
   // western hemisphere is [-180, 0)
   // eastern hemisphere is [0, 180]
-  // "8 or 9" is the index in the nested array
+  // "8 or 9" is the index in the second east/west nested array
   second_index = app.locals.longitude >= 0 ? 9 : 8;
 
   // adjust to user's local timezone
