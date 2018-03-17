@@ -47,7 +47,7 @@ Each of the four stories are related to each other, but without some clever tric
 
 I am a believer in open source, which is why nearly the entire project is available here.
 
-What's _not_ available is the actual story itself. Providing that full text would sort of default the purpose of the project. (This is also why the story is an SVG. Embedding the text in the browser DOM would just allow you to always read the two lines easily at any point in an hour.)
+What's _not_ available is the actual story itself. Providing that full text would sort of default the purpose of the project. (This is also why the story is an image. Embedding the text in the browser DOM would just allow you to always read the two lines easily at any point in an hour. Fetching the image and decoding it ought to provide just enough of a frustrating barrier.)
 
 The file _text.sample.yml_ provides a rough outline of what that file looks like. Feel free to add your own text and rename it to _text.yml_ to make the server render it.
 
