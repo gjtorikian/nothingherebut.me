@@ -1,32 +1,47 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
     <title>Nothing Here (but me)</title>
-    <link rel="stylesheet" href="/assets/css/app.css"/>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="stylesheet" href="https://unpkg.com/tachyons@4.9.1/css/tachyons.min.css"/>
+    <style>
+    @media screen and (max-device-width: 825px) {
+     .dn-custom { display: none; }
+    }
+    </style>
     <script src="/assets/javascripts/scripts.js"></script>
   </head>
   <body>
-    <main class="wrapper">
-      <section class="container">
-        <h1>Nothing Here (but me)</h1>
-        <p>
-          This site is an experiment in interactive fiction. It draws on inspiration from<br/>
-          <a href="https://en.wikipedia.org/wiki/Augusto_Monterroso">Augusto Monterroso</a>'s "The Dinosaur" and <a href="https://en.wikipedia.org/wiki/Julio_Cort%C3%A1zar">Julio Cortázar</a>'s "Hopscotch", as well as <a href="https://en.wikipedia.org/wiki/Robert_Irwin_(artist)">Robert Irwin</a>.<br/>
-          The text below changes once per hour over the course of a day. It tells a story, with each piece able to stand on its own.<br/>
-          But depending on where in the world you view this site, the story you receive every hour is different. <br/>
-          <a href="https://github.com/gjtorikian/nothingherebut.me">Learn more about how it works</a>.
-        </p>
-        <img id="canvas"/>
-        <section class="container">
-          <section class="row">
-            <section class="column">
-              <p id="thisTime"></p>
-            </section>
-            <section class="column">
-              <p id="nextTime"></p>
-            </section>
-          </section>
-        </section>
+    <main role="main" class="bg-white avenir">
+      <section class="tc pt5">
+        <h1 class="mv0 fw2 f3 lh-title"><span class="ttu tracked-mega mt0">Nothing Here</span> (but me)</h1>
       </section>
+      <section class="pv5 tc">
+        <img id="canvas" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAoAAAACCCAYAAADWmnkBAAAABmJLR0QA/wD/AP+gvaeTAAACc0lEQVR4nO3WoQ6AMBAFwZb//+dikSUEEDujT7zkzI4BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPDd3D9da680h3DPn3P4dAMDV8fcAAAC+JQABAGIEIABAjAAEAIgRgAAAMQIQACBGAAIAxAhAAIAYAQgAECMAAQBiBCAAQIwABACIEYAAADECEAAgRgACAMQIQACAGAEIABAjAAEAYgQgAECMAAQAiBGAAAAxAhAAIEYAAgDECEAAgBgBCAAQIwABAGIEIABAjAAEAIgRgAAAMQIQACBGAAIAxAhAAIAYAQgAECMAAQBiBCAAQIwABACIEYAAADECEAAgRgACAMQIQACAGAEIABAjAAEAYgQgAECMAAQAiBGAAAAxAhAAIEYAAgDECEAAgBgBCAAQIwABAGIEIABAjAAEAIgRgAAAMQIQACBGAAIAxAhAAIAYAQgAECMAAQBiBCAAQIwABACIEYAAADECEAAgRgACAMQIQACAGAEIABAjAAEAYgQgAECMAAQAiBGAAAAxAhAAIEYAAgDECEAAgBgBCAAQIwABAGIEIABAjAAEAIgRgAAAMQIQACBGAAIAxAhAAIAYAQgAECMAAQBiBCAAQIwABACIEYAAADECEAAgRgACAMQIQACAGAEIABAjAAEAYgQgAECMAAQAiBGAAAAxAhAAIEYAAgDECEAAgBgBCAAQIwABAGIEIABAjAAEAIgRgAAAMQIQACBGAAIAxAhAAIAYAQgAECMAAQBiBCAAQIwABACIEYAAADECEAAgRgACAMQIQACAGAEIABAjAAEAYgQgAECMAAQAiBGAAAAxAhAAIEYAAgDEnDcoBPBZZT62AAAAAElFTkSuQmCC">
+      </section>
+      <section class="tc">
+        <p class="mv0 fw1">
+          This site is an experiment in interactive fiction. It draws on inspiration from<br class="dn-custom"/>
+          <a class="link light-purple" href="https://en.wikipedia.org/wiki/Augusto_Monterroso">Augusto Monterroso</a>'s "The Dinosaur" and <a class="link light-purple" href="https://en.wikipedia.org/wiki/Julio_Cort%C3%A1zar">Julio Cortázar</a>'s "Hopscotch", as well as <a class="link light-purple" href="https://en.wikipedia.org/wiki/Robert_Irwin_(artist)">Robert Irwin</a>.<br class="dn-custom"/>
+          The text below changes once per hour over the course of a day. It tells a story, with each piece able to stand on its own.<br class="dn-custom"/>
+          Depending on where in the world you view this site, the story you receive every hour is different.
+        </p>
+        <p class="mv0 fw1">
+          <a class="link light-purple" href="https://github.com/gjtorikian/nothingherebut.me">The source code is available</a>, with further information on how it all works.
+        </p>
+      </section>
+      <div class="fl w-third pa2">
+        <div class="tc pv4"><p id="thisTime"></p></div>
+      </div>
+      <div class="fl w-third pa2">
+        <div class="tc pv4"></div>
+      </div>
+      <div class="fl w-third pa2">
+        <div class="tc pv4"><p id="nextTime"></p></div>
+      </div>
     </main>
   </body>
 </html>

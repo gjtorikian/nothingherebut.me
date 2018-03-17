@@ -2,6 +2,7 @@
 
 var express = require('express'),
     app = express(),
+    path    = require('path'),
     bodyParser = require('body-parser'),
     get_ip = require('ipware')().get_ip,
     geoip = require('geoip-lite'),
@@ -35,7 +36,7 @@ app.get('/', function(req, res) {
   app.locals.latitude = geo.ll[0];
   app.locals.longitude = geo.ll[1];
 
-  res.render('index', {});
+  res.sendFile(path.join(__dirname+'/index.html'));
 });
 
 app.post('/data', function(req, res) {
@@ -109,17 +110,17 @@ function calculateTimes(clientDate) {
 }
 
 function calculateTexts(phrase_one, phrase_one_alpha, phrase_two, phrase_two_alpha) {
-  var canvas = createCanvas(1120, 100),
+  var canvas = createCanvas(640, 130),
       ctx = canvas.getContext('2d');
 
   ctx.font = '35px Lusitana Bold';
-  ctx.fillStyle = "rgba(238, 7, 1 " + phrase_one_alpha + ")";
+  ctx.fillStyle = "rgba(0, 0, 0 " + phrase_one_alpha + ")";
   if (phrase_one != undefined)
-    ctx.fillText(phrase_one, 100, 30);
+    ctx.fillText(phrase_one, 10, 60);
 
-  ctx.fillStyle = "rgba(112, 87, 255, " + phrase_two_alpha + ")";
+  ctx.fillStyle = "rgba(0, 0, 0, " + phrase_two_alpha + ")";
   if (phrase_two != undefined)
-    ctx.fillText(phrase_two, 100, 30);
+    ctx.fillText(phrase_two, 10, 60);
 
   return canvas;
 }

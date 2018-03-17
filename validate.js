@@ -16,9 +16,12 @@ function parseArray(arr, errors) {
       if (text[1] === undefined) {
         text.push(""); // i am lazy
       }
-      // 65 chars seems to be a nice line length for the canvas
-      if (text[0].length > 65 || text[1].length > 65) {
-        errors.push("This line is too long: " + arr[i]);
+      // 45 chars seems to be a nice line length for the canvas
+      if (text[0].length > 45) {
+        errors.push("This line is too long: " + text[0]);
+      }
+      else if (text[1].length > 45) {
+        errors.push("This line is too long: " + text[1]);
       }
     }
   }
@@ -27,7 +30,7 @@ function parseArray(arr, errors) {
 parseArray(TEXTS, errors);
 
 if (errors.length > 0) {
-  console.error("The following errors were found: \n");
+  console.error("The following " + errors.length + " errors were found: \n");
   console.error(errors.join("\n\n"));
 }
 else {
