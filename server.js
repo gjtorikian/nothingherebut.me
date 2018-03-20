@@ -113,7 +113,7 @@ function calculateTexts(phrase_one, phrase_one_alpha, phrase_two, phrase_two_alp
   var canvas = createCanvas(640, 130),
       ctx = canvas.getContext('2d');
 
-  ctx.font = '29px Lusitana Bold';
+  ctx.font = '30px Lusitana Bold';
   ctx.fillStyle = "rgba(0, 0, 0 " + phrase_one_alpha + ")";
   if (phrase_one != undefined)
     ctx.fillText(phrase_one, 10, 60);
