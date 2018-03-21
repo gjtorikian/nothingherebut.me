@@ -1,22 +1,23 @@
-Date.prototype.toProperIsoString = function() {
-    var tzo = -this.getTimezoneOffset(),
-        dif = tzo >= 0 ? '+' : '-',
-        pad = function(num) {
-            var norm = Math.floor(Math.abs(num));
-            return (norm < 10 ? '0' : '') + norm;
-        };
-    return this.getFullYear() +
-        '-' + pad(this.getMonth() + 1) +
-        '-' + pad(this.getDate()) +
-        'T' + pad(this.getHours()) +
-        ':' + pad(this.getMinutes()) +
-        ':' + pad(this.getSeconds()) +
-        dif + pad(tzo / 60) +
-        ':' + pad(tzo % 60);
-}
 
 document.addEventListener("DOMContentLoaded", function(event) {
   var ONE_SECOND = 1000;
+
+  function properIsoString(date) {
+      var tzo = -date.getTimezoneOffset(),
+          dif = tzo >= 0 ? '+' : '-',
+          pad = function(num) {
+              var norm = Math.floor(Math.abs(num));
+              return (norm < 10 ? '0' : '') + norm;
+          };
+      return date.getFullYear() +
+          '-' + pad(date.getMonth() + 1) +
+          '-' + pad(date.getDate()) +
+          'T' + pad(date.getHours()) +
+          ':' + pad(date.getMinutes()) +
+          ':' + pad(date.getSeconds()) +
+          dif + pad(tzo / 60) +
+          ':' + pad(tzo % 60);
+  }
 
   // compatible with IE7+, Firefox, Chrome, Opera, Safari
   var xmlhttp = new XMLHttpRequest();
@@ -31,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
   };
   function fetch_and_replace_data() {
-    data = { date: new Date().toProperIsoString() };
+    data = { date: properIsoString(new Date()) };
     xmlhttp.open("POST", "/data", true);
     xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xmlhttp.send(JSON.stringify(data));
