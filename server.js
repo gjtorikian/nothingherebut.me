@@ -7,7 +7,8 @@ var express = require('express'),
     get_ip = require('ipware')().get_ip,
     geoip = require('geoip-lite'),
     yaml = require('js-yaml'),
-    fs   = require('fs');
+    fs   = require('fs'),
+    moment = require('moment');
 
 const { createCanvas, registerFont } = require('canvas');
 const port = process.env.PORT || 8888;
@@ -36,7 +37,7 @@ app.get('/', function(req, res) {
   app.locals.latitude = geo.ll[0];
   app.locals.longitude = geo.ll[1];
 
-  res.sendFile(path.join(__dirname+'/index.html'));
+  res.sendFile(path.join(__dirname +' /index.html'));
 });
 
 app.post('/data', function(req, res) {
@@ -57,29 +58,39 @@ app.post('/data', function(req, res) {
   var clientDate = new Date();
   clientDate = new Date(clientDate.setHours(clientDate.getHours() + req.body.offset));
 
+  var gmt = moment().utc();
+  var future_gmt = moment(gmt).add(14, 'hours');
+  var past_gmt = moment(gmt).subtract(12, 'hours');
+  var valid = moment(clientDate).isBetween(past_gmt, future_gmt);
+
   var curr_hour = clientDate.getHours();
   var next_hour = curr_hour + 1;
   var phrase_one = "", phrase_two = "";
 
-  if (curr_hour >= 0 && curr_hour < 7){
-    phrase_one = TEXTS[hourToIndex(curr_hour)];
-    phrase_two = TEXTS[hourToIndex(next_hour)];
+  if (valid) {
+    if (curr_hour >= 0 && curr_hour < 7){
+      phrase_one = TEXTS[hourToIndex(curr_hour)];
+      phrase_two = TEXTS[hourToIndex(next_hour)];
+    }
+    else if (curr_hour == 7) {
+      phrase_one = TEXTS[hourToIndex(curr_hour)];
+      phrase_two = TEXTS[first_index][hourToIndex(next_hour)];
+    }
+    else if (curr_hour >= 8 && curr_hour < 15) {
+      phrase_one = TEXTS[first_index][hourToIndex(curr_hour)];
+      phrase_two = TEXTS[first_index][hourToIndex(next_hour)];
+    }
+    else if (curr_hour == 15) {
+      phrase_one = TEXTS[first_index][hourToIndex(curr_hour)];
+      phrase_two = TEXTS[first_index][second_index][hourToIndex(next_hour)];
+    }
+    else if (curr_hour >= 16 && curr_hour < 24) {
+      phrase_one = TEXTS[first_index][second_index][hourToIndex(curr_hour)];
+      phrase_two = TEXTS[first_index][second_index][hourToIndex(next_hour)];
+    }
   }
-  else if (curr_hour == 7) {
-    phrase_one = TEXTS[hourToIndex(curr_hour)];
-    phrase_two = TEXTS[first_index][hourToIndex(next_hour)];
-  }
-  else if (curr_hour >= 8 && curr_hour < 15) {
-    phrase_one = TEXTS[first_index][hourToIndex(curr_hour)];
-    phrase_two = TEXTS[first_index][hourToIndex(next_hour)];
-  }
-  else if (curr_hour == 15) {
-    phrase_one = TEXTS[first_index][hourToIndex(curr_hour)];
-    phrase_two = TEXTS[first_index][second_index][hourToIndex(next_hour)];
-  }
-  else if (curr_hour >= 16 && curr_hour < 24) {
-    phrase_one = TEXTS[first_index][second_index][hourToIndex(curr_hour)];
-    phrase_two = TEXTS[first_index][second_index][hourToIndex(next_hour)];
+  else {
+    phrase_one = phrase_two = "INVALID\nDATE."
   }
 
   var times = calculateTimes(clientDate);
