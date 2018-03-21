@@ -1,38 +1,29 @@
 var yaml = require('js-yaml');
-    fs   = require('fs');
+    fs   = require('fs'),
+    _    = require('underscore');
+
+const { createCanvas, registerFont } = require('canvas');
 
 TEXTS = yaml.safeLoad(require('fs').readFileSync('text.yml', 'utf8'));
 
-var errors = [];
+TEXTS = _.flatten(TEXTS);
 
-function parseArray(arr, errors) {
-  var i = 0;
-  for (i; i < arr.length; i++) {
-    if (Array.isArray(arr[i])) {
-      parseArray(arr[i], errors);
-    }
-    else {
-      var text = arr[i].split("\n")
-      if (text[1] === undefined) {
-        text.push(""); // i am lazy
-      }
-      // 45 chars seems to be a nice line length for the canvas
-      if (text[0].length > 45) {
-        errors.push("This line is too long: " + text[0]);
-      }
-      else if (text[1].length > 45) {
-        errors.push("This line is too long: " + text[1]);
-      }
-    }
-  }
-}
+validation_page = "<!DOCTYPE html><html><head><title>Validation</title></head><body>";
 
-parseArray(TEXTS, errors);
+images = [];
+_.each(TEXTS, function(text) {
+  var canvas = createCanvas(640, 130),
+      ctx = canvas.getContext('2d');
 
-if (errors.length > 0) {
-  console.error("The following " + errors.length + " errors were found: \n");
-  console.error(errors.join("\n\n"));
-}
-else {
-  console.log("Everything looks great!");
-}
+  ctx.font = '30px Lusitana Bold';
+  ctx.fillStyle = "rgba(0, 0, 0, 1.0)";
+  ctx.fillText(text, 10, 60);
+
+  content = canvas.toDataURL();
+  image = "<img src=\"" + content + "\">";
+  images.push(image);
+});
+
+validation_page += images.join("\n") + "</body></html>";
+
+fs.writeFileSync("validation.html", validation_page);

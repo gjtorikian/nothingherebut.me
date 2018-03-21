@@ -3,8 +3,18 @@ var nodemon = require('gulp-nodemon');
 var livereload = require('gulp-livereload');
 var gulpif = require('gulp-if');
 var uglify = require('gulp-uglify');
+var execSync = require('child_process').execSync;
 
 var IS_PRODUCTION = process.env.NODE_ENV == "production";
+
+gulp.task('rebuild_texts',function(){
+  execSync("node validate.js");
+});
+
+gulp.task('validate',function(){
+  livereload.listen();
+  gulp.watch('text.yml', ['rebuild_texts']);
+});
 
 gulp.task('javascripts', function() {
   return gulp.src('assets/javascripts/*.js')
