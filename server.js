@@ -89,7 +89,7 @@ app.post('/data', function(req, res) {
     }
   }
   else {
-    phrase_one = phrase_two = "INVALID\nDATE."
+    phrase_one = phrase_two = "INVALID\nDATE.";
   }
 
   var times = calculateTimes(clientDate);
