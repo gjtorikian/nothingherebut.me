@@ -28,8 +28,8 @@ app.use('/', express.static('views'));
 
 app.get('/', function(req, res) {
   // on load, calculate the lat and long of the vistor
-  var ip_info = get_ip(req);
-  var client_ip = ip_info.clientIp;
+  var ipInfo = get_ip(req);
+  var client_ip = ipInfo.clientIp;
   var geo = geoip.lookup(client_ip);
   if (geo === null) {
     geo = geoip.lookup("52.173.133.217"); // no IP? give 'em somewhere in Des Moines.
@@ -43,59 +43,60 @@ app.get('/', function(req, res) {
 app.post('/data', function(req, res) {
   res.setHeader('Content-Type', 'application/json');
 
-  var first_index = 0, second_index = 0;
+  var firstIndex = 0, secondIndex = 0;
 
   // southern hemisphere is [-90, 0)
   // northern hemisphere is [0, 90]
   // "8 or 9" is the index in the first north/south nested array
-  first_index = app.locals.latitude >= 0 ? 9 : 8;
+  firstIndex = app.locals.latitude >= 0 ? 9 : 8;
   // western hemisphere is [-180, 0)
   // eastern hemisphere is [0, 180]
   // "8 or 9" is the index in the second east/west nested array
-  second_index = app.locals.longitude >= 0 ? 9 : 8;
+  secondIndex = app.locals.longitude >= 0 ? 9 : 8;
 
   // adjust to user's local timezone
   var clientDate = moment(req.body.date);
 
   var gmt = moment().utc();
-  var future_gmt = moment(gmt).add(14, 'hours');
-  var past_gmt = moment(gmt).subtract(12, 'hours');
-  var valid = moment(clientDate).isBetween(past_gmt, future_gmt);
+  var futureGMT = moment(gmt).add(14, 'hours');
+  var pastGMT = moment(gmt).subtract(12, 'hours');
+  var valid = moment(clientDate).isBetween(pastGMT, futureGMT);
 
-  var curr_hour = clientDate.hours();
-  var next_hour = curr_hour + 1;
-  var phrase_one = "", phrase_two = "";
+  var weekOfYear = weekOfMonth(gmt);//moment().week();
+  var currHour = clientDate.hours();
+  var nextHour = currHour + 1;
+  var phraseOne = "", phraseTwo = "";
 
   if (valid) {
-    if (curr_hour >= 0 && curr_hour < 7){
-      phrase_one = TEXTS[hourToIndex(curr_hour)];
-      phrase_two = TEXTS[hourToIndex(next_hour)];
+    if (currHour >= 0 && currHour < 7){
+      phraseOne = TEXTS[hourToIndex(currHour)];
+      phraseTwo = TEXTS[hourToIndex(nextHour)];
     }
-    else if (curr_hour == 7) {
-      phrase_one = TEXTS[hourToIndex(curr_hour)];
-      phrase_two = TEXTS[first_index][hourToIndex(next_hour)];
+    else if (currHour == 7) {
+      phraseOne = TEXTS[hourToIndex(currHour)];
+      phraseTwo = TEXTS[firstIndex][hourToIndex(nextHour)];
     }
-    else if (curr_hour >= 8 && curr_hour < 15) {
-      phrase_one = TEXTS[first_index][hourToIndex(curr_hour)];
-      phrase_two = TEXTS[first_index][hourToIndex(next_hour)];
+    else if (currHour >= 8 && currHour < 15) {
+      phraseOne = TEXTS[firstIndex][hourToIndex(currHour)];
+      phraseTwo = TEXTS[firstIndex][hourToIndex(nextHour)];
     }
-    else if (curr_hour == 15) {
-      phrase_one = TEXTS[first_index][hourToIndex(curr_hour)];
-      phrase_two = TEXTS[first_index][second_index][hourToIndex(next_hour)];
+    else if (currHour == 15) {
+      phraseOne = TEXTS[firstIndex][hourToIndex(currHour)];
+      phraseTwo = TEXTS[firstIndex][secondIndex][hourToIndex(nextHour)];
     }
-    else if (curr_hour >= 16 && curr_hour < 24) {
-      phrase_one = TEXTS[first_index][second_index][hourToIndex(curr_hour)];
-      phrase_two = TEXTS[first_index][second_index][hourToIndex(next_hour)];
+    else if (currHour >= 16 && currHour < 24) {
+      phraseOne = TEXTS[firstIndex][secondIndex][hourToIndex(currHour)];
+      phraseTwo = TEXTS[firstIndex][secondIndex][hourToIndex(nextHour)];
     }
   }
   else {
-    phrase_one = phrase_two = "INVALID\nDATE.";
+    phraseOne = phraseTwo = "INVALID\nDATE.";
   }
 
   var times = calculateTimes(clientDate);
-  var first_alpha = calculateAlpha(times.minutesUntilNextStory, times.secondsUntilNextStory);
-  var second_alpha = calculateAlpha(times.minutesForThisStory, times.secondsForThisStory);
-  var canvas = calculateTexts(phrase_one, first_alpha, phrase_two, second_alpha);
+  var firstAlpha = calculateAlpha(times.minutesUntilNextStory, times.secondsUntilNextStory);
+  var secondAlpha = calculateAlpha(times.minutesForThisStory, times.secondsForThisStory);
+  var canvas = calculateTexts(phraseOne, firstAlpha, phraseTwo, secondAlpha);
   var data = {
     times: times,
     canvas: canvas.toDataURL()
@@ -125,18 +126,18 @@ function calculateTimes(clientDate) {
   return time;
 }
 
-function calculateTexts(phrase_one, phrase_one_alpha, phrase_two, phrase_two_alpha) {
+function calculateTexts(phraseOne, phraseOneAlpha, phraseTwo, phraseTwoAlpha) {
   var canvas = createCanvas(640, 130),
       ctx = canvas.getContext('2d');
 
   ctx.font = '30px Lusitana Bold';
-  ctx.fillStyle = "rgba(0, 0, 0, " + phrase_one_alpha + ")";
-  if (phrase_one != undefined)
-    ctx.fillText(phrase_one, 10, 60);
+  ctx.fillStyle = "rgba(0, 0, 0, " + phraseOneAlpha + ")";
+  if (phraseOne != undefined)
+    ctx.fillText(phraseOne, 10, 60);
 
-  ctx.fillStyle = "rgba(0, 0, 0, " + phrase_two_alpha + ")";
-  if (phrase_two != undefined)
-    ctx.fillText(phrase_two, 10, 60);
+  ctx.fillStyle = "rgba(0, 0, 0, " + phraseTwoAlpha + ")";
+  if (phraseTwo != undefined)
+    ctx.fillText(phraseTwo, 10, 60);
 
   return canvas;
 }
@@ -148,6 +149,11 @@ function paddedTime(time) {
   else {
     return time;
   }
+}
+
+// grab week number relative to month
+function weekOfMonth(m) {
+  return m.week() - moment(m).startOf('month').week() + 1;
 }
 
 // some range between 0 and 3600 representing the 0 to 1.0 alpha range

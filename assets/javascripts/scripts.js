@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
       document.getElementById("canvas").setAttribute("src", response.canvas);
     }
   };
-  function fetch_and_replace_data() {
+  function fetchAndReplaceData() {
     data = { date: properIsoString(new Date()) };
     xmlhttp.open("POST", "/data", true);
     xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -50,5 +50,5 @@ document.addEventListener("DOMContentLoaded", function(event) {
     setTimeout(start, delay);
 }
 
-repeatEvery(fetch_and_replace_data, ONE_SECOND);
+repeatEvery(fetchAndReplaceData, ONE_SECOND);
 });
