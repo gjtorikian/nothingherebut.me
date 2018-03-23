@@ -55,15 +55,14 @@ app.post('/data', function(req, res) {
   second_index = app.locals.longitude >= 0 ? 9 : 8;
 
   // adjust to user's local timezone
-  var clientDate = new Date();
-  clientDate = new Date(clientDate.setHours(clientDate.getHours() + req.body.offset));
+  var clientDate = moment(req.body.date);
 
   var gmt = moment().utc();
   var future_gmt = moment(gmt).add(14, 'hours');
   var past_gmt = moment(gmt).subtract(12, 'hours');
   var valid = moment(clientDate).isBetween(past_gmt, future_gmt);
 
-  var curr_hour = clientDate.getHours();
+  var curr_hour = clientDate.hours();
   var next_hour = curr_hour + 1;
   var phrase_one = "", phrase_two = "";
 
@@ -108,12 +107,18 @@ app.post('/data', function(req, res) {
 function calculateTimes(clientDate) {
   var time = {};
 
-  var minutesUntilNextStory = 60 - clientDate.getMinutes();
-  var secondsUntilNextStory = 60 - clientDate.getSeconds();
+  var minutesUntilNextStory = 60 - clientDate.minutes();
+  if (minutesUntilNextStory == 60) {
+    minutesUntilNextStory = 0;
+  }
+  var secondsUntilNextStory = 60 - clientDate.seconds();
+  if (secondsUntilNextStory == 60) {
+    secondsUntilNextStory = 0;
+  }
   time.minutesUntilNextStory = paddedTime(minutesUntilNextStory);
   time.secondsUntilNextStory = paddedTime(secondsUntilNextStory);
-  var minutesForThisStory = clientDate.getMinutes();
-  var secondsForThisStory = clientDate.getSeconds();
+  var minutesForThisStory = clientDate.minutes();
+  var secondsForThisStory = clientDate.seconds();
   time.minutesForThisStory = paddedTime(minutesForThisStory);
   time.secondsForThisStory = paddedTime(secondsForThisStory);
 

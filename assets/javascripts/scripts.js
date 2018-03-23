@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
   };
   function fetch_and_replace_data() {
-    data = { offset: new Date().getTimezoneOffset() / -60 };
+    data = { date: new Date() };
     xmlhttp.open("POST", "/data", true);
     xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xmlhttp.send(JSON.stringify(data));
