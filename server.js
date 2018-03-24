@@ -140,21 +140,19 @@ function checkValidity(clientDate, regionDate) {
   return validity;
 }
 
-function calculateTimes(clientDate) {
+function calculateTimes(date) {
   var time = {};
 
-  var minutesUntilNextStory = 60 - clientDate.minutes();
-  if (minutesUntilNextStory == 60) {
+  var minutesUntilNextStory = 60 - date.minutes();
+  var secondsUntilNextStory = 60 - date.seconds();
+  if (minutesUntilNextStory == 60 && secondsUntilNextStory == 60) {
     minutesUntilNextStory = 0;
-  }
-  var secondsUntilNextStory = 60 - clientDate.seconds();
-  if (secondsUntilNextStory == 60) {
     secondsUntilNextStory = 0;
   }
   time.minutesUntilNextStory = paddedTime(minutesUntilNextStory);
   time.secondsUntilNextStory = paddedTime(secondsUntilNextStory);
-  var minutesForThisStory = clientDate.minutes();
-  var secondsForThisStory = clientDate.seconds();
+  var minutesForThisStory = date.minutes();
+  var secondsForThisStory = date.seconds();
   time.minutesForThisStory = paddedTime(minutesForThisStory);
   time.secondsForThisStory = paddedTime(secondsForThisStory);
 
