@@ -41,7 +41,7 @@ West   |           | East     West |           | East      (hours 16 - 23)
 
 Each `|` pipe represents an hour. At the beginning of the day (midnight to 7 a.m.), everyone receives the same story. The first branch occurs at 8 a.m. If you live in the Northern Hemisphere, you get the Northern branch; if you live in the Southern Hemisphere, you get the Southern branch. Similarly, at 4 p.m. the second split occurs. Depending on whether you live in the Eastern or Western Hemisphere, by the time 11 p.m. comes around you'll have received one of four unique narratives.
 
-Each of the four stories are related to each other, but without some clever trickery it's difficult to read in its entirety.
+Over the course of a month, the four stories do cycle through every branch, meaning that within four weeks you'll have been given the opportunity to read every part.
 
 # Open source
 

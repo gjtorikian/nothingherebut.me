@@ -74,9 +74,9 @@ app.post('/data', function(req, res) {
   if (valid) {
     regionLocation = calculateRegion(latitude, longitude);
     indices = calculateIndex(regionDate, regionLocation);
+    path = indices[0];
     firstIndex = indices[1];
     secondIndex = indices[2];
-    path = indices[0] + "(" + (firstIndex - 8) + ", " + (secondIndex - 8) + ")";
 
     var currHour = regionDate.hours();
     var nextHour = currHour + 1;
@@ -199,49 +199,49 @@ function calculateIndex(date, region) {
   if (phase < 0.25) {
     switch(region) {
       case Region.NORTHWEST:
-        return ["NW", 8, 8];
+        return ["NW00MA", 8, 8];
       case Region.NORTHEAST:
-        return ["NE", 8, 9];
+        return ["NE01MO", 8, 9];
       case Region.SOUTHEAST:
-        return ["SW", 9, 8];
+        return ["SW10ME", 9, 8];
       case Region.SOUTHWEST:
-        return ["SE", 9, 9];
+        return ["SE11HE", 9, 9];
     }
   }
   else if (phase >= 0.25 && phase < 0.5) {
     switch(region) {
       case Region.NORTHWEST:
-        return ["NW", 8, 8];
+        return ["NW10ME", 9, 8];
       case Region.NORTHEAST:
-        return ["NE", 8, 9];
+        return ["NE11HE", 9, 9];
       case Region.SOUTHEAST:
-        return ["SE", 9, 8];
+        return ["SW00MA", 8, 8];
       case Region.SOUTHWEST:
-        return ["SW", 9, 9];
+        return ["SE01MO", 8, 9];
     }
   }
   else if (phase >= 0.5 && phase < 0.75) {
     switch(region) {
       case Region.NORTHWEST:
-        return ["NW", 8, 8];
+        return ["NW01MO", 8, 9];
       case Region.NORTHEAST:
-        return ["NE", 8, 9];
+        return ["NE10ME", 9, 8];
       case Region.SOUTHEAST:
-        return ["SE", 9, 8];
+        return ["SW11HE", 9, 9];
       case Region.SOUTHWEST:
-        return ["SW", 9, 9];
+        return ["SE00MA", 8, 8];
     }
   }
   else if (phase >= 0.75) {
     switch(region) {
       case Region.NORTHWEST:
-        return ["NW", 8, 8];
+        return ["NW11HE", 9, 9];
       case Region.NORTHEAST:
-        return ["NE", 8, 9];
+        return ["NE00MA", 8, 8];
       case Region.SOUTHEAST:
-        return ["SE", 9, 8];
+        return ["SW01MO", 8, 9];
       case Region.SOUTHWEST:
-        return ["SW", 9, 9];
+        return ["SE10ME", 9, 8];
     }
   }
 }
