@@ -143,16 +143,22 @@ function checkValidity(clientDate, regionDate) {
 function calculateTimes(date) {
   var time = {};
 
-  var minutesUntilNextStory = 60 - date.minutes();
+  var minutesUntilNextStory = 59 - date.minutes();
   var secondsUntilNextStory = 60 - date.seconds();
-  if (minutesUntilNextStory == 60 && secondsUntilNextStory == 60) {
-    minutesUntilNextStory = 0;
+  if (secondsUntilNextStory == 60) {
     secondsUntilNextStory = 0;
+    if (minutesUntilNextStory == 0) {
+      minutesUntilNextStory = 1;
+    }
   }
-  time.minutesUntilNextStory = paddedTime(minutesUntilNextStory);
-  time.secondsUntilNextStory = paddedTime(secondsUntilNextStory);
   var minutesForThisStory = date.minutes();
   var secondsForThisStory = date.seconds();
+  if (minutesForThisStory == 0 && secondsForThisStory == 0) {
+    minutesUntilNextStory = 60;
+  }
+
+  time.minutesUntilNextStory = paddedTime(minutesUntilNextStory);
+  time.secondsUntilNextStory = paddedTime(secondsUntilNextStory);
   time.minutesForThisStory = paddedTime(minutesForThisStory);
   time.secondsForThisStory = paddedTime(secondsForThisStory);
 
