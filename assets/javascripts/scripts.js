@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
       document.getElementById("nextTime").innerHTML = timeUntilNext;
       timeForThis = response.times.minutesForThisStory + ":" + response.times.secondsForThisStory;
       document.getElementById("thisTime").innerHTML = timeForThis;
+      document.getElementById("path").innerHTML = response.path;
       document.getElementById("canvas").setAttribute("src", response.canvas);
     }
   };

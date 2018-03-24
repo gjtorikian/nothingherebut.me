@@ -8,6 +8,7 @@ TEXTS = yaml.safeLoad(require('fs').readFileSync('text.yml', 'utf8'));
 
 TEXTS = _.flatten(TEXTS);
 
+console.log(TEXTS.join("\n"))
 validation_page = "<!DOCTYPE html><html><head><title>Validation</title></head><body>";
 
 images = [];
