@@ -160,17 +160,18 @@ function calculateTimes(date) {
 }
 
 function calculateTexts(phraseOne, phraseOneAlpha, phraseTwo, phraseTwoAlpha) {
-  var canvas = createCanvas(640, 130),
+  var canvas = createCanvas(640, 80),
       ctx = canvas.getContext('2d');
 
   ctx.font = '30px Lusitana Bold';
+
   ctx.fillStyle = "rgba(0, 0, 0, " + phraseOneAlpha + ")";
   if (phraseOne != undefined)
-    ctx.fillText(phraseOne, 10, 60);
+    ctx.fillText(phraseOne, 10, 20);
 
   ctx.fillStyle = "rgba(0, 0, 0, " + phraseTwoAlpha + ")";
   if (phraseTwo != undefined)
-    ctx.fillText(phraseTwo, 10, 60);
+    ctx.fillText(phraseTwo, 10, 20);
 
   return canvas;
 }

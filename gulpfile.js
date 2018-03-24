@@ -13,6 +13,7 @@ gulp.task('rebuild_texts',function(){
 
 gulp.task('validate',function(){
   livereload.listen();
+  gulp.watch('validate.js', ['rebuild_texts']);
   gulp.watch('text.yml', ['rebuild_texts']);
 });
 

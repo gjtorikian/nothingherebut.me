@@ -13,12 +13,12 @@ validation_page = "<!DOCTYPE html><html><head><title>Validation</title></head><b
 
 images = [];
 _.each(TEXTS, function(text) {
-  var canvas = createCanvas(640, 130),
+  var canvas = createCanvas(640, 80),
       ctx = canvas.getContext('2d');
 
   ctx.font = '30px Lusitana Bold';
   ctx.fillStyle = "rgba(0, 0, 0, 1.0)";
-  ctx.fillText(text, 10, 60);
+  ctx.fillText(text, 10, 25);
 
   content = canvas.toDataURL();
   image = "<img src=\"" + content + "\">";
