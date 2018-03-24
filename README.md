@@ -1,6 +1,6 @@
 # nothingherebut.me
 
-N o t h i n g H e r e (but me) is a little experiment in storytelling.
+N o t h i n g H e r e (but me) is a vanishing story.
 
 At the beginning of an hour, a phrase appears. As that hour passes, the phrase begins to fade out, and the next phrase in the story fades in. Thus, the best time to read a phrase is at the top of every hour; the hardest time to read both phrases is at the half-hour mark.
 
