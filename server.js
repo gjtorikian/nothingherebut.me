@@ -167,11 +167,11 @@ function calculateTexts(phraseOne, phraseOneAlpha, phraseTwo, phraseTwoAlpha) {
 
   ctx.fillStyle = "rgba(0, 0, 0, " + phraseOneAlpha + ")";
   if (phraseOne != undefined)
-    ctx.fillText(phraseOne, 10, 20);
+    ctx.fillText(phraseOne, 10, 25);
 
   ctx.fillStyle = "rgba(0, 0, 0, " + phraseTwoAlpha + ")";
   if (phraseTwo != undefined)
-    ctx.fillText(phraseTwo, 10, 20);
+    ctx.fillText(phraseTwo, 10, 25);
 
   return canvas;
 }
