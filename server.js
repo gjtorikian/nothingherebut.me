@@ -140,17 +140,18 @@ function checkValidity(clientDate, regionDate) {
   return validity;
 }
 
+// quite sure all the addition and re-setting can be better arranged
 function calculateTimes(date) {
   var time = {};
 
   var minutesUntilNextStory = 59 - date.minutes();
   var secondsUntilNextStory = 60 - date.seconds();
+
   if (secondsUntilNextStory == 60) {
     secondsUntilNextStory = 0;
-    if (minutesUntilNextStory == 0) {
-      minutesUntilNextStory = 1;
-    }
+    minutesUntilNextStory += 1;
   }
+
   var minutesForThisStory = date.minutes();
   var secondsForThisStory = date.seconds();
   if (minutesForThisStory == 0 && secondsForThisStory == 0) {
