@@ -67,7 +67,7 @@ app.post('/data', function(req, res) {
   var clientDate = moment(req.body.date);
   var regionDate = moment().tz(timezone);
   var regionLocation = "";
-  var path = ""
+  var path = "";
   var indices = [];
   var valid = checkValidity(clientDate, regionDate);
 
