@@ -64,12 +64,11 @@ app.post('/data', function(req, res) {
 
   // adjust to user's local timezone
   var timezone = tzlookup(latitude, longitude);
-  var clientDate = moment(req.body.date);
   var regionDate = moment().tz(timezone);
   var regionLocation = "";
   var path = "";
   var indices = [];
-  var valid = checkValidity(clientDate, regionDate);
+  var valid = checkValidity(regionDate);
 
   if (valid) {
     regionLocation = calculateRegion(latitude, longitude);
@@ -121,22 +120,13 @@ app.post('/data', function(req, res) {
 });
 
 // can't be out of MIN/MAX GMT bounds
-// need to make sure client and server dates roughly match
-function checkValidity(clientDate, regionDate) {
+function checkValidity(regionDate) {
   var gmt = moment().utc();
   var futureGMT = moment(gmt).add(14, 'hours');
   var pastGMT = moment(gmt).subtract(12, 'hours');
   var validity = true;
 
-  if (clientDate !== undefined) {
-    if (!moment(clientDate).isBetween(pastGMT, futureGMT)) {
-      validity = false;
-    }
-    else if (moment(clientDate).hours() != moment(regionDate).hours()) {
-      validity = false;
-    }
-  }
-  else if (!moment(regionDate).isBetween(pastGMT, futureGMT)) {
+  if (!moment(regionDate).isBetween(pastGMT, futureGMT)) {
     validity = false;
   }
 
