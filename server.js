@@ -32,14 +32,14 @@ app.get('/', function(req, res) {
   // on load, calculate the lat and long of the visitor
   // based on IP
   var ip = req.header('x-forwarded-for') || req.connection.remoteAddress;
-  iplocation(ip, function (err, res) {
+  iplocation(ip, function (err, data) {
     if (err) {
       app.locals.latitude = 40.6617;
       app.locals.longitude = -73.9855;
     }
     else {
-      app.locals.latitude = res.latitude;
-      app.locals.longitude = res.longitude;
+      app.locals.latitude = data.latitude;
+      app.locals.longitude = data.longitude;
     }
 
     res.sendFile(path.join(__dirname + '/views/index.html'));
