@@ -4,7 +4,7 @@ const express = require('express'),
       app = express(),
       path    = require('path'),
       bodyParser = require('body-parser'),
-      geoip = require('geoip-lite'),
+      iplocation = require('iplocation'),
       yaml = require('js-yaml'),
       fs   = require('fs'),
       moment = require('moment-timezone'),
@@ -32,14 +32,18 @@ app.get('/', function(req, res) {
   // on load, calculate the lat and long of the visitor
   // based on IP
   var ip = req.header('x-forwarded-for') || req.connection.remoteAddress;
-  var geo = geoip.lookup(ip);
-  if (geo === null) {
-    geo = geoip.lookup("72.229.28.185"); // no IP? give 'em somewhere in New York.
-  }
-  app.locals.latitude = geo.ll[0];
-  app.locals.longitude = geo.ll[1];
+  iplocation(ip, function (err, res) {
+    if (err) {
+      app.locals.latitude = 40.6617;
+      app.locals.longitude = -73.9855;
+    }
+    else {
+      app.locals.latitude = res.latitude;
+      app.locals.longitude = res.longitude;
+    }
 
-  res.sendFile(path.join(__dirname + '/views/index.html'));
+    res.sendFile(path.join(__dirname + '/views/index.html'));
+  });
 });
 
 app.post('/data', function(req, res) {
@@ -49,12 +53,6 @@ app.post('/data', function(req, res) {
   var phraseOne = "", phraseTwo = "";
   var latitude = app.locals.latitude,
       longitude = app.locals.longitude;
-
-  // STILL nothing? give 'em somewhere in New York.
-  if (latitude === undefined || longitude === undefined) {
-    latitude = 40.6617;
-    longitude = -73.9855;
-  }
 
   // adjust to user's local timezone
   var timezone = tzlookup(latitude, longitude);
