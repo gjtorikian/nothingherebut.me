@@ -4,7 +4,6 @@ const express = require('express'),
       app = express(),
       path    = require('path'),
       bodyParser = require('body-parser'),
-      publicIp = require('public-ip'),
       geoip = require('geoip-lite'),
       yaml = require('js-yaml'),
       fs   = require('fs'),
@@ -26,28 +25,21 @@ const Region = {
   SOUTHEAST: 3,
 };
 
-// returns the index in the stored array
-function hourToIndex(hour) {
-  return hour % 8;
-}
-
 app.use(bodyParser.json());
 app.use(express.static('./public'));
 
 app.get('/', function(req, res) {
   // on load, calculate the lat and long of the visitor
   // based on IP
-  publicIp.v4().then(ip => {
-    var geo = geoip.lookup(ip);
-    if (geo === null) {
-      geo = geoip.lookup("72.229.28.185"); // no IP? give 'em somewhere in New York.
-    }
-    app.locals.latitude = geo.ll[0];
-    app.locals.longitude = geo.ll[1];
+  var ip = req.header('x-forwarded-for') || req.connection.remoteAddress;
+  var geo = geoip.lookup(ip);
+  if (geo === null) {
+    geo = geoip.lookup("72.229.28.185"); // no IP? give 'em somewhere in New York.
+  }
+  app.locals.latitude = geo.ll[0];
+  app.locals.longitude = geo.ll[1];
 
-    res.sendFile(path.join(__dirname + '/views/index.html'));
-  });
-
+  res.sendFile(path.join(__dirname + '/views/index.html'));
 });
 
 app.post('/data', function(req, res) {
@@ -133,6 +125,11 @@ function checkValidity(regionDate) {
   }
 
   return validity;
+}
+
+// returns the index in the stored array
+function hourToIndex(hour) {
+  return hour % 8;
 }
 
 // quite sure all the addition and re-setting can be better arranged
