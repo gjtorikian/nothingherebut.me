@@ -1,16 +1,16 @@
 /*jshint esversion: 6 */
 
-var express = require('express'),
-    app = express(),
-    path    = require('path'),
-    bodyParser = require('body-parser'),
-    get_ip = require('ipware')().get_ip,
-    geoip = require('geoip-lite'),
-    yaml = require('js-yaml'),
-    fs   = require('fs'),
-    moment = require('moment-timezone'),
-    SunCalc = require('suncalc'),
-    tzlookup = require("tz-lookup");
+const express = require('express'),
+      app = express(),
+      path    = require('path'),
+      bodyParser = require('body-parser'),
+      publicIp = require('public-ip'),
+      geoip = require('geoip-lite'),
+      yaml = require('js-yaml'),
+      fs   = require('fs'),
+      moment = require('moment-timezone'),
+      SunCalc = require('suncalc'),
+      tzlookup = require("tz-lookup");
 
 const { createCanvas, registerFont } = require('canvas');
 const port = process.env.PORT || 8888;
@@ -19,7 +19,7 @@ registerFont('public/assets/fonts/Lusitana-Bold.ttf', { family: 'Lusitana Bold',
 
 TEXTS = yaml.safeLoad(require('fs').readFileSync('text.yml', 'utf8'));
 
-var Region = {
+const Region = {
   NORTHWEST: 0,
   NORTHEAST: 1,
   SOUTHWEST: 3,
@@ -36,16 +36,18 @@ app.use(express.static('./public'));
 
 app.get('/', function(req, res) {
   // on load, calculate the lat and long of the visitor
-  var ipInfo = get_ip(req);
-  var client_ip = ipInfo.clientIp;
-  var geo = geoip.lookup(client_ip);
-  if (geo === null) {
-    geo = geoip.lookup("72.229.28.185"); // no IP? give 'em somewhere in New York.
-  }
-  app.locals.latitude = geo.ll[0];
-  app.locals.longitude = geo.ll[1];
+  // based on IP
+  publicIp.v4().then(ip => {
+    var geo = geoip.lookup(ip);
+    if (geo === null) {
+      geo = geoip.lookup("72.229.28.185"); // no IP? give 'em somewhere in New York.
+    }
+    app.locals.latitude = geo.ll[0];
+    app.locals.longitude = geo.ll[1];
 
-  res.sendFile(path.join(__dirname + '/views/index.html'));
+    res.sendFile(path.join(__dirname + '/views/index.html'));
+  });
+
 });
 
 app.post('/data', function(req, res) {
