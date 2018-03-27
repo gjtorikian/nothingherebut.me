@@ -1,3 +1,5 @@
+/*jshint esversion: 6 */
+
 var yaml = require('js-yaml');
     fs   = require('fs'),
     _    = require('underscore');
@@ -9,7 +11,11 @@ TEXTS = yaml.safeLoad(require('fs').readFileSync('text.yml', 'utf8'));
 TEXTS = _.flatten(TEXTS);
 
 console.log(TEXTS.join("\n"))
-validation_page = "<!DOCTYPE html><html><head><title>Validation</title></head><body>";
+
+var longestString = TEXTS.sort(function (a, b) { return b.length - a.length; })[0];
+console.log("Longest string (" + longestString.length + ") is: \n" + longestString);
+
+validationPage = "<!DOCTYPE html><html><head><title>Validation</title></head><body>";
 
 images = [];
 _.each(TEXTS, function(text) {
@@ -25,6 +31,6 @@ _.each(TEXTS, function(text) {
   images.push(image);
 });
 
-validation_page += images.join("\n") + "</body></html>";
+validationPage += images.join("\n") + "</body></html>";
 
-fs.writeFileSync("validation.html", validation_page);
+fs.writeFileSync("validation.html", validationPage);
