@@ -33,7 +33,7 @@ app.get('/', function(req, res) {
   // based on IP
   var ip = req.header('x-forwarded-for') || req.connection.remoteAddress;
   iplocation(ip, function (err, data) {
-    if (err) {
+    if (err || data === undefined || data.time_zone == '') {
       // no IP? give 'em somewhere in New Yawk
       app.locals.latitude = 40.6617;
       app.locals.longitude = -73.9855;
