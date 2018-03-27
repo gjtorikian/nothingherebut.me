@@ -127,13 +127,16 @@ function checkValidity(clientDate, regionDate) {
   var futureGMT = moment(gmt).add(14, 'hours');
   var pastGMT = moment(gmt).subtract(12, 'hours');
   var validity = true;
-  if (!moment(clientDate).isBetween(pastGMT, futureGMT)) {
-    validity = false;
+
+  if (clientDate !== undefined) {
+    if (!moment(clientDate).isBetween(pastGMT, futureGMT)) {
+      validity = false;
+    }
+    else if (moment(clientDate).hours() != moment(regionDate).hours()) {
+      validity = false;
+    }
   }
   else if (!moment(regionDate).isBetween(pastGMT, futureGMT)) {
-    validity = false;
-  }
-  else if (moment(clientDate).hours() != moment(regionDate).hours()) {
     validity = false;
   }
 
