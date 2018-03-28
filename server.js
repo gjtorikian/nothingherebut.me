@@ -58,6 +58,7 @@ app.post('/data', function(req, res) {
   // adjust to user's local timezone
   var timezone = tzlookup(latitude, longitude);
   var regionDate = moment().tz(timezone);
+  var utcOffset = regionDate.utcOffset();
   var regionLocation = "";
   var path = "";
   var indices = [];
@@ -66,7 +67,7 @@ app.post('/data', function(req, res) {
   if (valid) {
     regionLocation = calculateRegion(latitude, longitude);
     indices = calculateIndex(regionDate, regionLocation);
-    path = indices[0];
+    path = indices[0] + utcOffset;
     firstIndex = indices[1];
     secondIndex = indices[2];
 
