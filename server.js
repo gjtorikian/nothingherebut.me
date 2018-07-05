@@ -4,7 +4,7 @@ const express = require('express'),
       app = express(),
       path    = require('path'),
       bodyParser = require('body-parser'),
-      iplocation = require('iplocation'),
+      maxmind = require('maxmind'),
       yaml = require('js-yaml'),
       fs   = require('fs'),
       moment = require('moment-timezone'),
@@ -32,15 +32,23 @@ app.get('/', function(req, res) {
   // on load, calculate the lat and long of the visitor
   // based on IP
   var ip = req.header('x-forwarded-for') || req.connection.remoteAddress;
-  iplocation(ip, function (err, data) {
-    if (err || data === undefined || data.time_zone == '') {
-      // no IP? give 'em somewhere in New Yawk
-      app.locals.latitude = 40.6617;
-      app.locals.longitude = -73.9855;
+  maxmind.open('GeoIP2-City.mmdb', function (err, cityLookup) {
+    if (err || ip === undefined) {
+      console.error(ip)
     }
     else {
-      app.locals.latitude = data.latitude;
-      app.locals.longitude = data.longitude;
+      data = cityLookup.get('108.46.250.180');
+      location = data.location;
+      if (data.location !== undefined) {
+        app.locals.latitude = data.location.latitude;
+        app.locals.longitude = data.location.longitude;
+      }
+    }
+
+    if (app.locals.latitude === undefined || app.locals.longitude === undefined) {
+      // give 'em somewhere in New Yawk
+      app.locals.latitude = 40.6617;
+      app.locals.longitude = -73.9855;
     }
 
     res.sendFile(path.join(__dirname + '/views/index.html'));
