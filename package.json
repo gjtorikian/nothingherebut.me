@@ -16,8 +16,8 @@
   "dependencies": {
     "body-parser": "^1.18",
     "canvas": "^2.0.0-alpha.12",
-    "express": "^4.13.2",
-    "gulp": "^3.9.1",
+    "express": "^4.16.3",
+    "gulp": "^4.0.0",
     "gulp-if": "^2.0.2",
     "gulp-ruby-sass": "^2.1.1",
     "gulp-uglify": "^3.0.0",
@@ -25,7 +25,7 @@
     "maxmind": "^2.7.0",
     "moment": "^2.21.0",
     "moment-timezone": "^0.5.14",
-    "npm": "^5.7.1",
+    "npm": "^6.3.0",
     "suncalc": "^1.8.0",
     "tz-lookup": "^6.1.6"
   },
