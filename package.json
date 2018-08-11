@@ -14,26 +14,25 @@
     "validate": "gulp validate"
   },
   "dependencies": {
-    "body-parser": "^1.18",
-    "canvas": "^2.0.0-alpha.12",
+    "body-parser": "^1.18.3",
+    "canvas": "^2.0.0-alpha.13",
     "express": "^4.16.3",
     "gulp": "^4.0.0",
     "gulp-if": "^2.0.2",
     "gulp-ruby-sass": "^2.1.1",
-    "gulp-uglify": "^3.0.0",
-    "js-yaml": "^3.11.0",
+    "gulp-uglify": "^3.0.1",
+    "js-yaml": "^3.12.0",
     "maxmind": "^2.7.0",
-    "moment": "^2.21.0",
-    "moment-timezone": "^0.5.14",
+    "moment": "^2.22.2",
+    "moment-timezone": "^0.5.21",
     "npm": "^6.3.0",
     "suncalc": "^1.8.0",
-    "tz-lookup": "^6.1.6"
+    "tz-lookup": "^6.1.8"
   },
   "devDependencies": {
     "gulp-append-prepend": "^1.0.4",
     "gulp-livereload": "^3.8.1",
-    "gulp-nodemon": "^2.2.1",
-    "underscore": "^1.8.3"
+    "underscore": "^1.9.1"
   },
   "engines": {
     "node": ">= 4.0.0"

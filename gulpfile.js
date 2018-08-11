@@ -1,5 +1,5 @@
 var gulp = require('gulp');
-var nodemon = require('gulp-nodemon');
+var exec = require('child_process').exec;
 var livereload = require('gulp-livereload');
 var gulpif = require('gulp-if');
 var uglify = require('gulp-uglify');
@@ -26,14 +26,16 @@ gulp.task('javascripts', function() {
 
 gulp.task('watch', function() {
   livereload.listen();
-  gulp.watch('assets/javascripts/*.js', ['javascripts']);
-  gulp.watch('text.yml', ['server']);
-  gulp.watch('views/*.html', ['server']);
+  gulp.watch('assets/javascripts/*.js', gulp.series('javascripts'));
 });
 
-gulp.task('server',function(){
-  nodemon();
+gulp.task('server', function (cb) {
+  exec('node server', function (err, stdout, stderr) {
+    console.log(stdout);
+    console.log(stderr);
+    cb(err);
+  });
 });
 
-gulp.task('compile', ['javascripts']);
-gulp.task('serve', ['compile', 'server', 'watch']);
+gulp.task('compile', gulp.series('javascripts'));
+gulp.task('serve', gulp.parallel(['compile', 'server', 'watch']));
