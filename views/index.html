@@ -40,29 +40,32 @@
 
     <link rel="stylesheet" href="https://unpkg.com/tachyons@4.9.1/css/tachyons.min.css"/>
     <style>
-    @media screen and (max-device-width: 825px) {
-     .dn-custom { display: none; }
-    }
+      div.image-holder {
+        height: 40px;
+        width: 40px;
+        position: absolute;
+        float: right;
+        right: 0;
+      }
 
-    .image-holder {
-      height: 40px;
-      width: 40px;
-      position: absolute;
-      float: right;
-      right: 0;
-    }
-
-    div.image-holder img {
-      opacity: 0.5;
-      position: absolute;
-      float: right;
-      top: 0;
-      right: 0;
-    }
-    div.image-holder:hover img {
-      opacity: 1;
-      transition: opacity .5s ease-in-out;
-    }
+      div.image-holder img {
+        opacity: 0.5;
+        position: absolute;
+        float: right;
+        top: 0;
+        right: 0;
+      }
+      div.image-holder:hover img {
+        opacity: 1;
+        transition: opacity .5s ease-in-out;
+      }
+      @media screen and (max-device-width: 825px) {
+       .dn-custom { display: none; }
+       div.image-holder {
+         width: 20px;
+         height: 20px;
+       }
+      }
     </style>
     <script src="/assets/javascripts/scripts.js"></script>
   </head>
