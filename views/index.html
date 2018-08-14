@@ -52,18 +52,16 @@
       right: 0;
     }
 
-    div.image-holder img.after {
-      visibility: hidden;
-      opacity: 0;
-      transition: visibility 0s, opacity 0.5s linear;
+    div.image-holder img {
+      opacity: 0.5;
       position: absolute;
       float: right;
       top: 0;
       right: 0;
     }
-    div.image-holder:hover  img.after {
-      visibility: visible;
+    div.image-holder:hover img {
       opacity: 1;
+      transition: opacity .5s ease-in-out;
     }
     </style>
     <script src="/assets/javascripts/scripts.js"></script>
@@ -71,8 +69,7 @@
   <body>
     <div class="image-holder">
       <a href="https://www.gjtorikian.com/">
-        <img class="before" src="https://www.gjtorikian.com/assets/images/symbol_opacity_small.png" />
-        <img class="after" src="https://www.gjtorikian.com/assets/images/symbol_small.png" />
+        <img src="https://www.gjtorikian.com/assets/images/symbol_small.png" />
       </a>
     </div>
 
