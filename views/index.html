@@ -43,10 +43,39 @@
     @media screen and (max-device-width: 825px) {
      .dn-custom { display: none; }
     }
+
+    .image-holder {
+      height: 40px;
+      width: 40px;
+      position: absolute;
+      float: right;
+      right: 0;
+    }
+
+    div.image-holder img.after {
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0s, opacity 0.5s linear;
+      position: absolute;
+      float: right;
+      top: 0;
+      right: 0;
+    }
+    div.image-holder:hover  img.after {
+      visibility: visible;
+      opacity: 1;
+    }
     </style>
     <script src="/assets/javascripts/scripts.js"></script>
   </head>
   <body>
+    <div class="image-holder">
+      <a href="https://www.gjtorikian.com/">
+        <img class="before" src="https://www.gjtorikian.com/assets/images/symbol_opacity_small.png" />
+        <img class="after" src="https://www.gjtorikian.com/assets/images/symbol_small.png" />
+      </a>
+    </div>
+
     <main role="main" class="bg-white">
       <section class="tc pt4">
         <h1 class="mv0 fw3 f6 lh-title avenir"><span class="ttu tracked-mega mt0">Nothing Here</span> (but me)</h1>
