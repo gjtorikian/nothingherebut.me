@@ -66,8 +66,21 @@
          height: 30px;
        }
       }
+      #pleaserotate-backdrop {
+        color: #000;
+        background-color: #ffffff;
+      }
     </style>
-    <script src="/assets/javascripts/scripts.js"></script>
+    <script type="text/javascript">
+      PleaseRotateOptions = {
+        forcePortrait: false,
+        message: "Rotate",
+        subMessage: "",
+        allowClickBypass: false,
+      };
+    </script>
+    <script type="text/javascript" src="/assets/javascripts/pleaserotate.js"></script>
+    <script type="text/javascript" src="/assets/javascripts/scripts.js"></script>
   </head>
   <body>
     <div class="image-holder">
