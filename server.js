@@ -1,43 +1,45 @@
 /*jshint esversion: 6 */
 
-const express = require('express'),
-      app = express(),
-      path    = require('path'),
-      bodyParser = require('body-parser'),
-      maxmind = require('maxmind'),
-      yaml = require('js-yaml'),
-      fs   = require('fs'),
-      moment = require('moment-timezone'),
-      SunCalc = require('suncalc'),
-      tzlookup = require("tz-lookup");
+const express = require("express"),
+  app = express(),
+  path = require("path"),
+  bodyParser = require("body-parser"),
+  maxmind = require("maxmind"),
+  yaml = require("js-yaml"),
+  fs = require("fs"),
+  moment = require("moment-timezone"),
+  SunCalc = require("suncalc"),
+  tzlookup = require("tz-lookup");
 
-const { createCanvas, registerFont } = require('canvas');
+const { createCanvas, registerFont } = require("canvas");
 const port = process.env.PORT || 8888;
 
-registerFont('public/assets/fonts/Lusitana-Bold.ttf', { family: 'Lusitana Bold', weight: 'Bold' });
+registerFont("public/assets/fonts/Lusitana-Bold.ttf", {
+  family: "Lusitana Bold",
+  weight: "Bold"
+});
 
-TEXTS = yaml.safeLoad(require('fs').readFileSync('text.yml', 'utf8'));
+TEXTS = yaml.safeLoad(require("fs").readFileSync("text.yml", "utf8"));
 
 const Region = {
   NORTHWEST: 0,
   NORTHEAST: 1,
   SOUTHWEST: 3,
-  SOUTHEAST: 3,
+  SOUTHEAST: 3
 };
 
 app.use(bodyParser.json());
-app.use(express.static('./public'));
+app.use(express.static("./public"));
 
-app.get('/', function(req, res) {
+app.get("/", function(req, res) {
   // on load, calculate the lat and long of the visitor
   // based on IP
-  var ip = req.header('x-forwarded-for') || req.connection.remoteAddress;
-  maxmind.open('GeoIP2-City.mmdb', function (err, cityLookup) {
+  var ip = req.header("x-forwarded-for") || req.connection.remoteAddress;
+  maxmind.open("GeoIP2-City.mmdb", function(err, cityLookup) {
     if (err || ip === undefined) {
-      console.error(ip)
-    }
-    else {
-      data = cityLookup.get('108.46.250.180');
+      console.error(ip);
+    } else {
+      data = cityLookup.get("108.46.250.180");
       location = data.location;
       if (data.location !== undefined) {
         app.locals.latitude = data.location.latitude;
@@ -45,23 +47,28 @@ app.get('/', function(req, res) {
       }
     }
 
-    if (app.locals.latitude === undefined || app.locals.longitude === undefined) {
+    if (
+      app.locals.latitude === undefined ||
+      app.locals.longitude === undefined
+    ) {
       // give 'em somewhere in New Yawk
       app.locals.latitude = 40.6617;
       app.locals.longitude = -73.9855;
     }
 
-    res.sendFile(path.join(__dirname + '/views/index.html'));
+    res.sendFile(path.join(__dirname + "/views/index.html"));
   });
 });
 
-app.post('/data', function(req, res) {
-  res.setHeader('Content-Type', 'application/json');
+app.post("/data", function(req, res) {
+  res.setHeader("Content-Type", "application/json");
 
-  var firstIndex = 0, secondIndex = 0;
-  var phraseOne = "", phraseTwo = "";
+  var firstIndex = 0,
+    secondIndex = 0;
+  var phraseOne = "",
+    phraseTwo = "";
   var latitude = app.locals.latitude,
-      longitude = app.locals.longitude;
+    longitude = app.locals.longitude;
 
   // adjust to user's local timezone
   var timezone = tzlookup(latitude, longitude);
@@ -85,31 +92,32 @@ app.post('/data', function(req, res) {
     if (currHour >= 0 && currHour < 7) {
       phraseOne = TEXTS[hourToIndex(currHour)];
       phraseTwo = TEXTS[hourToIndex(nextHour)];
-    }
-    else if (currHour == 7) {
+    } else if (currHour == 7) {
       phraseOne = TEXTS[hourToIndex(currHour)];
       phraseTwo = TEXTS[firstIndex][hourToIndex(nextHour)];
-    }
-    else if (currHour >= 8 && currHour < 15) {
+    } else if (currHour >= 8 && currHour < 15) {
       phraseOne = TEXTS[firstIndex][hourToIndex(currHour)];
       phraseTwo = TEXTS[firstIndex][hourToIndex(nextHour)];
-    }
-    else if (currHour == 15) {
+    } else if (currHour == 15) {
       phraseOne = TEXTS[firstIndex][hourToIndex(currHour)];
       phraseTwo = TEXTS[firstIndex][secondIndex][hourToIndex(nextHour)];
-    }
-    else if (currHour >= 16 && currHour < 24) {
+    } else if (currHour >= 16 && currHour < 24) {
       phraseOne = TEXTS[firstIndex][secondIndex][hourToIndex(currHour)];
       phraseTwo = TEXTS[firstIndex][secondIndex][hourToIndex(nextHour)];
     }
-  }
-  else {
+  } else {
     phraseOne = phraseTwo = "INVALID\nDATE.";
   }
 
   var times = calculateTimes(regionDate);
-  var firstAlpha = calculateAlpha(times.minutesUntilNextStory, times.secondsUntilNextStory);
-  var secondAlpha = calculateAlpha(times.minutesForThisStory, times.secondsForThisStory);
+  var firstAlpha = calculateAlpha(
+    times.minutesUntilNextStory,
+    times.secondsUntilNextStory
+  );
+  var secondAlpha = calculateAlpha(
+    times.minutesForThisStory,
+    times.secondsForThisStory
+  );
   var canvas = calculateTexts(phraseOne, firstAlpha, phraseTwo, secondAlpha);
 
   var data = {
@@ -124,8 +132,8 @@ app.post('/data', function(req, res) {
 // can't be out of MIN/MAX GMT bounds
 function checkValidity(regionDate) {
   var gmt = moment().utc();
-  var futureGMT = moment(gmt).add(14, 'hours');
-  var pastGMT = moment(gmt).subtract(12, 'hours');
+  var futureGMT = moment(gmt).add(14, "hours");
+  var pastGMT = moment(gmt).subtract(12, "hours");
   var validity = true;
 
   if (!moment(regionDate).isBetween(pastGMT, futureGMT)) {
@@ -168,17 +176,15 @@ function calculateTimes(date) {
 
 function calculateTexts(phraseOne, phraseOneAlpha, phraseTwo, phraseTwoAlpha) {
   var canvas = createCanvas(640, 80),
-      ctx = canvas.getContext('2d');
+    ctx = canvas.getContext("2d");
 
-  ctx.font = '30px Lusitana Bold';
+  ctx.font = "30px Lusitana Bold";
 
   ctx.fillStyle = "rgba(0, 0, 0, " + phraseOneAlpha + ")";
-  if (phraseOne != undefined)
-    ctx.fillText(phraseOne, 10, 25);
+  if (phraseOne != undefined) ctx.fillText(phraseOne, 10, 25);
 
   ctx.fillStyle = "rgba(0, 0, 0, " + phraseTwoAlpha + ")";
-  if (phraseTwo != undefined)
-    ctx.fillText(phraseTwo, 10, 25);
+  if (phraseTwo != undefined) ctx.fillText(phraseTwo, 10, 25);
 
   return canvas;
 }
@@ -186,8 +192,7 @@ function calculateTexts(phraseOne, phraseOneAlpha, phraseTwo, phraseTwoAlpha) {
 function paddedTime(time) {
   if (time < 10) {
     return "0" + time;
-  }
-  else {
+  } else {
     return time;
   }
 }
@@ -203,7 +208,7 @@ function calculateIndex(date, region) {
 
   // "8 or 9" is the index in the nested arrays to branch to
   if (phase < 0.25) {
-    switch(region) {
+    switch (region) {
       case Region.NORTHWEST:
         return ["NW00MA", 8, 8];
       case Region.NORTHEAST:
@@ -213,9 +218,8 @@ function calculateIndex(date, region) {
       case Region.SOUTHWEST:
         return ["SE11HE", 9, 9];
     }
-  }
-  else if (phase >= 0.25 && phase < 0.5) {
-    switch(region) {
+  } else if (phase >= 0.25 && phase < 0.5) {
+    switch (region) {
       case Region.NORTHWEST:
         return ["NW10ME", 9, 8];
       case Region.NORTHEAST:
@@ -225,9 +229,8 @@ function calculateIndex(date, region) {
       case Region.SOUTHWEST:
         return ["SE01MO", 8, 9];
     }
-  }
-  else if (phase >= 0.5 && phase < 0.75) {
-    switch(region) {
+  } else if (phase >= 0.5 && phase < 0.75) {
+    switch (region) {
       case Region.NORTHWEST:
         return ["NW01MO", 8, 9];
       case Region.NORTHEAST:
@@ -237,9 +240,8 @@ function calculateIndex(date, region) {
       case Region.SOUTHWEST:
         return ["SE00MA", 8, 8];
     }
-  }
-  else if (phase >= 0.75) {
-    switch(region) {
+  } else if (phase >= 0.75) {
+    switch (region) {
       case Region.NORTHWEST:
         return ["NW11HE", 9, 9];
       case Region.NORTHEAST:
@@ -259,8 +261,7 @@ function calculateIndex(date, region) {
 function calculateRegion(latitude, longitude) {
   if (latitude >= 0) {
     return longitude < 0 ? Region.NORTHWEST : Region.NORTHEAST;
-  }
-  else {
+  } else {
     return longitude < 0 ? Region.SOUTHWEST : Region.SOUTHEAST;
   }
 }
@@ -269,8 +270,8 @@ function calculateRegion(latitude, longitude) {
 function calculateAlpha(m, s) {
   // we may have padded this into a string via `paddedTime` :(
   var minutes = Number(m),
-      seconds = Number(s);
-  return Number( ( (minutes * 60) + seconds) / 3600).toFixed(2);
+    seconds = Number(s);
+  return Number((minutes * 60 + seconds) / 3600).toFixed(2);
 }
 
 app.listen(port, () => {
