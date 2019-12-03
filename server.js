@@ -6,7 +6,6 @@ const express = require("express"),
   bodyParser = require("body-parser"),
   maxmind = require("maxmind"),
   yaml = require("js-yaml"),
-  fs = require("fs"),
   moment = require("moment-timezone"),
   SunCalc = require("suncalc"),
   tzlookup = require("tz-lookup");
