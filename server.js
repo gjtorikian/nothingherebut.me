@@ -13,7 +13,7 @@ const express = require("express"),
 const { createCanvas, registerFont } = require("canvas");
 const port = process.env.PORT || 8888;
 
-registerFont("public/assets/fonts/Lusitana-Bold.ttf", {
+registerFont("./public/assets/fonts/Lusitana-Bold.ttf", {
   family: "Lusitana Bold",
   weight: "Bold"
 });
