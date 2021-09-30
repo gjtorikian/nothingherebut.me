@@ -1,7 +1,0 @@
-node_modules/
-.sass-cache
-public/assets/css
-public/assets/javascripts
-text.yml
-validation.html
-GeoIP2-City.mmdb
