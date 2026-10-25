@@ -23,7 +23,7 @@ TEXTS = yaml.safeLoad(require("fs").readFileSync("text.yml", "utf8"));
 const Region = {
   NORTHWEST: 0,
   NORTHEAST: 1,
-  SOUTHWEST: 3,
+  SOUTHWEST: 2,
   SOUTHEAST: 3
 };
 
